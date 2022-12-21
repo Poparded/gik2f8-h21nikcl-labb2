@@ -144,7 +144,6 @@ function onSubmit(e) {
 
     /* Anrop till funktion som har hand om att skicka uppgift till api:et */
     saveTask();
-    todoListElement.reset()
   }
 
 }
