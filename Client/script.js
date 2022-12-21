@@ -136,6 +136,10 @@ function onSubmit(e) {
     /* Anrop till funktion som har hand om att skicka uppgift till api:et */
     saveTask();
   }
+  todoForm.title.value = "";
+  todoForm.description.value = "";
+  todoForm.dueDate.value = "";
+
 }
 
 /* Funktion för att ta hand om formulärets data och skicka det till api-klassen. */
@@ -188,25 +192,24 @@ function renderList() {
       var dueDate2 = new Date(b.dueDate);
       return dueDate1 - dueDate2;
     });
+    let filteredTrue = []
     console.log(tasks);
     /* De hämtade uppgifterna från servern via api:et getAll-funktion får heta tasks, eftersom callbackfunktionen som skickades till then() har en parameter som är döpt så. Det är tasks-parametern som är innehållet i promiset. */
-
-    /* Koll om det finns någonting i tasks och om det är en array med längd större än 0 */
-    if (tasks && tasks.length > 0) {
-      /* Om tasks är en lista som har längd större än 0 loopas den igenom med forEach. forEach tar, likt then, en callbackfunktion. Callbackfunktionen tar emot namnet på varje enskilt element i arrayen, som i detta fall är ett objekt innehållande en uppgift.  */
-      tasks.forEach((task) => {
-        /* Om vi bryter ned nedanstående rad får vi något i stil med:
-        1. todoListElement: ul där alla uppgifter ska finnas
-        2. insertAdjacentHTML: DOM-metod som gör att HTML kan läggas till inuti ett element på en given position
-        3. "beforeend": positionen där man vill lägga HTML-koden, i detta fall i slutet av todoListElement, alltså längst ned i listan. 
-        4. renderTask(task) - funktion som returnerar HTML. 
-        5. task (objekt som representerar en uppgift som finns i arrayen) skickas in till renderTask, för att renderTask ska kunna skapa HTML utifrån egenskaper hos uppgifts-objektet. 
-        */
-
-        /* Denna kod körs alltså en gång per element i arrayen tasks, dvs. en  gång för varje uppgiftsobjekt i listan. */
+    tasks.forEach((task) => {
+      if (task.completed == false) {
         todoListElement.insertAdjacentHTML('beforeend', renderTask(task));
-      });
-    }
+      }
+      else {
+        filteredTrue.push(task)
+      }
+
+    });
+    filteredTrue.forEach((task) => {
+      todoListElement.insertAdjacentHTML('beforeend', renderTask(task));
+
+
+    });
+
   });
 }
 
@@ -268,10 +271,10 @@ function renderTask({ id, title, description, dueDate, completed }) {
         <div class="flex items-center">
         <input type="checkbox" onclick="updateTask(${id})" class="px-3">
         </div>
-          <h3 class="mb-3 flex-1 text-xl font-bold text-pink-800 uppercase">${title}</h3>
+          <h3 class="mb-3 flex-1 text-xl font-bold text-green-800 uppercase">${title}</h3>
           <div>
             <span>${dueDate}</span>
-            <button onclick="deleteTask(${id})" class="inline-block bg-amber-500 text-xs text-amber-900 border border-white px-3 py-1 rounded-md ml-2">Ta bort</button>
+            <button onclick="deleteTask(${id})" class="inline-block bg-amber-500 text-xs text-green-900 border border-white px-3 py-1 rounded-md ml-2">Ta bort</button>
           </div>
         </div>`;
     /* Här har templatesträngen avslutats tillfälligt för att jag bara vill skriva ut kommande del av koden om description faktiskt finns */
