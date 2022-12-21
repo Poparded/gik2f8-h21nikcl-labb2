@@ -132,7 +132,7 @@ app.patch('/tasks', async (req, res) => {
       if (task.id == currentList[i].id) {
         console.log(currentList[i], task.id);
         console.log("Hell yeah");
-        currentList[i].completed = true;
+        currentList[i].completed = task.completed;
         console.log(currentList);
         await fs.writeFile(
           './tasks.json',
