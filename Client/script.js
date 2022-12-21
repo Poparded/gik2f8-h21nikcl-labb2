@@ -91,7 +91,13 @@ function validateField(field) {
         descriptionValid = false;
         validationMessage =
           "Fältet 'Beskrvining' får inte innehålla mer än 500 tecken.";
-      } else {
+      }
+      else if (value.length === 0) {
+        dueDateValid = false;
+        validationMessage = "Du måste specifiera ett datum :(((((((((((( .";
+
+      }
+      else {
         descriptionValid = true;
       }
       break;
@@ -103,7 +109,9 @@ function validateField(field) {
         /* I videon för lektion 6 är nedanstående rad fel, det står där descriptionValid =  false;, men ska förstås vara dueDateValid = false; */
         dueDateValid = false;
         validationMessage = "Fältet 'Slutförd senast' är obligatorisk.";
-      } else {
+      }
+
+      else {
         dueDateValid = true;
       }
       break;
@@ -120,6 +128,7 @@ function validateField(field) {
   field.previousElementSibling.innerText = validationMessage;
   /* Tailwind har en klass som heter "hidden". Om valideringsmeddelandet ska synas vill vi förstås inte att <p>-elementet ska vara hidden, så den klassen tas bort. */
   field.previousElementSibling.classList.remove('hidden');
+
 }
 
 /* Callbackfunktion som används för eventlyssnare när någon klickar på knappen av typen submit */
@@ -135,10 +144,8 @@ function onSubmit(e) {
 
     /* Anrop till funktion som har hand om att skicka uppgift till api:et */
     saveTask();
+    todoListElement.reset()
   }
-  todoForm.title.value = "";
-  todoForm.description.value = "";
-  todoForm.dueDate.value = "";
 
 }
 
@@ -169,7 +176,17 @@ function saveTask() {
       /* När en kontroll har gjorts om task ens finns - dvs. att det som kom tillbaka från servern faktiskt var ett objekt kan vi anropa renderList(), som ansvarar för att uppdatera vår todo-lista. renderList kommer alltså att köras först när vi vet att det gått bra att spara ner den nya uppgiften.  */
       renderList();
     }
-  });
+
+  }
+  );
+
+  title.value = '';
+  description.value = '';
+  dueDate.value = '';
+  titleValid = false;
+  descriptionValid = false;
+  dueDateValid = false;
+
 }
 
 /* En funktion som ansvarar för att skriva ut todo-listan i ett ul-element. */

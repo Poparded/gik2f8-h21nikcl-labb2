@@ -129,7 +129,7 @@ app.patch('/tasks', async (req, res) => {
     const currentList = JSON.parse(ListBuffer)
     console.log("Körs");
     for (let i = 0; i < currentList.length; i++) {
-      if (task.id == currentList[i].id) {
+      if (task.id == currentList[i].id && !currentList[i].completed) {
         console.log(currentList[i], task.id);
         console.log("Hell yeah");
         currentList[i].completed = task.completed;
@@ -138,7 +138,11 @@ app.patch('/tasks', async (req, res) => {
           './tasks.json',
           JSON.stringify(currentList));
       }
-
+      else if (task.id == currentList[i].id && currentList[i].completed)
+        currentList[i].completed = !task.completed;
+      await fs.writeFile(
+        './tasks.json',
+        JSON.stringify(currentList));
 
 
 
