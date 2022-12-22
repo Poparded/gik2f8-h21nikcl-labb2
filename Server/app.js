@@ -128,25 +128,24 @@ app.patch('/tasks', async (req, res) => {
     /* Innehållet i filen parsas till JavaScript för att kunna behandlas vidare i kod. */
     const currentList = JSON.parse(ListBuffer)
     console.log("Körs");
-    for (let i = 0; i < currentList.length; i++) {
-      if (task.id == currentList[i].id && !currentList[i].completed) {
-        console.log(currentList[i], task.id);
-        console.log("Hell yeah");
-        currentList[i].completed = task.completed;
-        console.log(currentList);
-        await fs.writeFile(
-          './tasks.json',
-          JSON.stringify(currentList));
-      }
-      else if (task.id == currentList[i].id && currentList[i].completed)
-        currentList[i].completed = !task.completed;
+    // Find the task with the matching id
+    const i = currentList.findIndex(item => item.id === task.id);
+
+    if (!currentList[i].completed) {
+      currentList[i].completed = task.completed;
       await fs.writeFile(
         './tasks.json',
         JSON.stringify(currentList));
-
-
-
     }
+    else if (currentList[i].completed)
+      currentList[i].completed = !task.completed;
+    await fs.writeFile(
+      './tasks.json',
+      JSON.stringify(currentList));
+
+
+
+
     res.send(currentList);
 
   } catch (error) {

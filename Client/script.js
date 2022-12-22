@@ -190,45 +190,25 @@ function saveTask() {
 
 /* En funktion som ansvarar för att skriva ut todo-listan i ett ul-element. */
 function renderList() {
-  /* Logg som visar att vi hamnat i render-funktionen */
   console.log('rendering');
 
-  /* Anrop till getAll hos vårt api-objekt. Metoden skapades i Api.js och har hand om READ-förfrågningar mot vårt backend. */
   api.getAll().then((tasks) => {
-    /* När vi fått svaret från den asynkrona funktionen getAll, körs denna anonyma arrow-funktion som skickats till then() */
-
-    /* Här används todoListElement, en variabel som skapades högt upp i denna fil med koden const todoListElement = document.getElementById('todoList');
-     */
-
-    /* Först sätts dess HTML-innehåll till en tom sträng. Det betyder att alla befintliga element och all befintlig text inuti todoListElement tas bort. Det kan nämligen finnas list-element däri när denna kod körs, men de tas här bort för att hela listan ska uppdateras i sin helhet. */
     todoListElement.innerHTML = '';
 
-    tasks.sort(function compare(a, b) {
-      var dueDate1 = new Date(a.dueDate);
-      var dueDate2 = new Date(b.dueDate);
-      return dueDate1 - dueDate2;
-    });
-    let filteredTrue = []
-    console.log(tasks);
-    /* De hämtade uppgifterna från servern via api:et getAll-funktion får heta tasks, eftersom callbackfunktionen som skickades till then() har en parameter som är döpt så. Det är tasks-parametern som är innehållet i promiset. */
-    tasks.forEach((task) => {
-      if (task.completed == false) {
-        todoListElement.insertAdjacentHTML('beforeend', renderTask(task));
-      }
-      else {
-        filteredTrue.push(task)
-      }
+    // Sort tasks by due date
+    tasks.sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate));
 
-    });
-    filteredTrue.forEach((task) => {
-      todoListElement.insertAdjacentHTML('beforeend', renderTask(task));
+    // Split tasks into completed and not completed
+    const notCompletedTasks = tasks.filter(task => !task.completed);
+    const completedTasks = tasks.filter(task => task.completed);
 
+    // Render not completed tasks first
+    notCompletedTasks.forEach(task => todoListElement.insertAdjacentHTML('beforeend', renderTask(task)));
 
-    });
-
+    // Render completed tasks after
+    completedTasks.forEach(task => todoListElement.insertAdjacentHTML('beforeend', renderTask(task)));
   });
 }
-
 /* renderTask är en funktion som returnerar HTML baserat på egenskaper i ett uppgiftsobjekt. 
 Endast en uppgift åt gången kommer att skickas in här, eftersom den anropas inuti en forEach-loop, där uppgifterna loopas igenom i tur och ordning.  */
 
