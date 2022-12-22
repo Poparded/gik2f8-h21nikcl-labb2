@@ -127,7 +127,6 @@ app.patch('/tasks', async (req, res) => {
     const ListBuffer = await fs.readFile('./tasks.json');
     /* Innehållet i filen parsas till JavaScript för att kunna behandlas vidare i kod. */
     const currentList = JSON.parse(ListBuffer)
-    console.log("Körs");
     // Find the task with the matching id
     const i = currentList.findIndex(item => item.id === task.id);
 
