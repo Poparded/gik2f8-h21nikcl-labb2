@@ -230,7 +230,7 @@ function renderTask({ id, title, description, dueDate, completed }) {
   
   <li class="select-none mt-2 py-2 border-b border-amber-300">
       <div class="flex items-center">
-      <input type="checkbox" onclick="updateTask(${id})" class="px-3">
+      <input type="checkbox" onclick="updateTask(${id})"  class="px-3">
       </div>
         <h3 class="mb-3 flex-1 text-xl font-bold text-pink-800 uppercase">${title}</h3>
         <div>
@@ -265,7 +265,7 @@ function renderTask({ id, title, description, dueDate, completed }) {
   
     <li class=" opacity-50 select-none mt-2 py-2 border-b border-amber-300">
         <div class="flex items-center">
-        <input type="checkbox" onclick="updateTask(${id})" class="px-3">
+        <input type="checkbox"  onclick="updateTask(${id})" checked  class="px-3">
         </div>
           <h3 class="mb-3 flex-1 text-xl font-bold text-green-800 uppercase">${title}</h3>
           <div>
